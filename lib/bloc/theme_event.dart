@@ -13,11 +13,23 @@ class ThemeSidebarExtended extends ThemeEvent {}
 class ThemeSidebarShrank extends ThemeEvent {}
 
 class ThemeSidebarSelected extends ThemeEvent {
-  final int index;
+  final String selectedItemName;
   const ThemeSidebarSelected({
-    required this.index,
+    required this.selectedItemName,
   });
 
   @override
-  List<Object> get props => [index];
+  List<Object> get props => [selectedItemName];
 }
+
+class ThemeSidebarHovered extends ThemeEvent {
+  final String hoveredItemName;
+  const ThemeSidebarHovered({
+    this.hoveredItemName = '',
+  });
+
+  @override
+  List<Object> get props => [hoveredItemName];
+}
+
+

@@ -1,24 +1,16 @@
+import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 import 'bloc/theme_bloc.dart';
 import 'model/sidebar_item.dart';
 
-double navbarWidth = 250;
-double SidebarItemHeight = 100;
-Color navbarColor = const Color.fromARGB(255, 75, 34, 240);
-LinearGradient gradient1 = const LinearGradient(
-  colors: [Color(0xff3bc2ff), Color(0x9fe6fadd)],
-  begin: Alignment.bottomRight,
-  end: Alignment.topLeft,
-);
-
-LinearGradient gradient2 = const LinearGradient(
-  colors: [Color(0xff3bc2ff), Color(0xdfe6fadd)],
-  begin: Alignment.bottomCenter,
-  end: Alignment.topCenter,
-);
+double sidebarWidth = 350;
+double shrinkSidebarWidth = 110;
+double sidebarItemHeight = 50;
+Color sidebarColor = const Color(0xff252b36);
 
 class App extends StatefulWidget {
   const App({super.key});
@@ -43,106 +35,125 @@ class _AppState extends State<App> {
 
   List<SideBarItemModel> administrationItems = <SideBarItemModel>[
     SideBarItemModel(
-      iconData: PhosphorIcons.globeHemisphereWest,
-      color: Colors.teal,
-      label: 'Regions',
-    ),
-    SideBarItemModel(
       iconData: PhosphorIcons.buildings,
       color: Colors.purple,
       label: 'Sites',
     ),
     SideBarItemModel(
       iconData: PhosphorIcons.infinity,
-      color: Colors.green,
+      color: Colors.greenAccent[700]!,
       label: 'Companies',
     ),
     SideBarItemModel(
       iconData: PhosphorIcons.notePencil,
-      color: Colors.yellow,
+      color: Colors.yellow[600]!,
       label: 'Projects',
     ),
     SideBarItemModel(
-        iconData: PhosphorIcons.plusMinus,
+      iconData: PhosphorIcons.plusMinus,
+      color: Colors.teal,
+      label: 'Audits',
+      subItems: <SideBarItemModel>[
+        SideBarItemModel(
+          iconData: PhosphorIcons.clipboardText,
+          color: Colors.teal,
+          label: 'Templates',
+        ),
+        SideBarItemModel(
+          iconData: PhosphorIcons.plusMinus,
+          color: Colors.teal,
+          label: 'Audits ',
+        ),
+      ],
+    ),
+    SideBarItemModel(
+        iconData: PhosphorIcons.aperture,
         color: Colors.teal,
-        label: 'Audits',
-        subItems: <SideBarItemModel>[
+        label: 'Masters',
+        subItems: [
           SideBarItemModel(
-            iconData: PhosphorIcons.clipboardText,
-            color: Colors.black,
-            label: 'Templates',
+            iconData: PhosphorIcons.globeHemisphereWest,
+            color: Colors.teal,
+            label: 'Regions',
           ),
           SideBarItemModel(
-            iconData: PhosphorIcons.clipboardText,
-            color: Colors.white,
-            label: 'Templates',
-          )
+            iconData: PhosphorIcons.bellRinging,
+            color: Colors.redAccent,
+            label: 'Priority Levels',
+          ),
+          SideBarItemModel(
+            iconData: PhosphorIcons.circlesFour,
+            color: Colors.blueAccent,
+            label: 'Observation Types',
+          ),
+          SideBarItemModel(
+            iconData: PhosphorIcons.circlesThree,
+            color: Colors.redAccent,
+            label: 'Awareness Obs Categories',
+          ),
+          SideBarItemModel(
+            iconData: PhosphorIcons.checkSquareOffset,
+            color: Colors.blueAccent,
+            label: 'Awareness Categories',
+          ),
         ]),
     SideBarItemModel(
       iconData: PhosphorIcons.usersThree,
       color: Colors.blueAccent,
       label: 'Users',
     ),
-    SideBarItemModel(
-      iconData: PhosphorIcons.bellRinging,
-      color: Colors.redAccent,
-      label: 'Priority Levels',
-    ),
-    SideBarItemModel(
-      iconData: PhosphorIcons.circlesFour,
-      color: Colors.blueAccent,
-      label: 'Observation Types',
-    ),
   ];
 
-  List<Widget> _builtMainItems(int selectedIndex, bool isSidebarExtended) {
-    // print('build main');
-    List<Widget> mainItemWidgets = [];
-    for (int i = 0; i < mainItems.length; i++) {
-      mainItemWidgets.add(
+  List<Widget> _buildSidebarItems(
+    List<SideBarItemModel> items,
+    String selectedItemName,
+    bool isSidebarExtended,
+  ) {
+    List<Widget> subItemWidgets = [];
+    for (int i = 0; i < items.length; i++) {
+      subItemWidgets.add(
         SidebarItem(
-          iconData: mainItems[i].iconData,
-          label: mainItems[i].label,
-          color: mainItems[i].color,
-          index: i,
-          selectedIndex: selectedIndex,
+          iconData: items[i].iconData,
+          label: items[i].label,
+          color: items[i].color,
+          selectedItemName: context.read<ThemeBloc>().state.selectedItemName,
           isSidebarExtended: isSidebarExtended,
+          subItems: items[i].subItems,
           onTap: () {
             context.read<ThemeBloc>().add(
                   ThemeSidebarSelected(
-                    index: i,
+                    selectedItemName: items[i].label,
                   ),
                 );
           },
         ),
       );
     }
-    return mainItemWidgets;
+    return subItemWidgets;
   }
 
-  List<Widget> _builtAdministrationItems(
-      int selectedIndex, bool isSidebarExtended) {
-    List<Widget> administrationItemWidgets = [];
-    for (int i = 0; i < administrationItems.length; i++) {
-      administrationItemWidgets.add(
-        SidebarItem(
-          iconData: administrationItems[i].iconData,
-          label: administrationItems[i].label,
-          color: administrationItems[i].color,
-          index: i + mainItems.length,
-          selectedIndex: selectedIndex,
-          isSidebarExtended: isSidebarExtended,
-          onTap: () {
-            context.read<ThemeBloc>().add(
-                  ThemeSidebarSelected(
-                    index: i + mainItems.length,
-                  ),
-                );
-          },
-        ),
-      );
-    }
-    return administrationItemWidgets;
+  Widget _buildCriteria(bool isSidebarExtended, String label) {
+    return isSidebarExtended
+        ? Container(
+            margin: const EdgeInsets.only(
+              left: 20,
+              top: 10,
+              bottom: 10,
+            ),
+            child: Text(
+              label,
+              style: const TextStyle(
+                color: Color(0xff92959a),
+                fontSize: 20,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          )
+        : const Icon(
+            PhosphorIcons.dotsThree,
+            size: 30,
+            color: Colors.white,
+          );
   }
 
   @override
@@ -154,127 +165,147 @@ class _AppState extends State<App> {
             children: [
               Container(
                 decoration: BoxDecoration(
-                  gradient: gradient1,
+                  color: sidebarColor,
                 ),
                 height: MediaQuery.of(context).size.height,
-                width: state.isSidebarExtended ? navbarWidth : 100,
-                // color: navbarColor,
+                width:
+                    state.isSidebarExtended ? sidebarWidth : shrinkSidebarWidth,
+                // color: sidebarColor,
                 child: Padding(
                   padding: const EdgeInsets.only(top: 20),
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          right: 20,
-                          // left: (navbarWidth + SidebarItemHeight) / 8.0,
-                          left: 30,
-                          bottom: 50,
-                        ),
-                        child: Row(
-                          children: [
-                            Image.asset('images/safety_icon.png'),
-                            state.isSidebarExtended
-                                ? const SizedBox(
-                                    width: 10,
-                                  )
-                                : Container(),
-                            state.isSidebarExtended
-                                ? const Text(
-                                    'Safety ETA',
-                                    style: TextStyle(
-                                      fontSize: 25,
-                                      color: Colors.orangeAccent,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  )
-                                : Container()
-                          ],
-                        ),
-                      ),
-                      ..._builtMainItems(
-                        state.selectedIndex,
-                        state.isSidebarExtended,
-                      ),
-                      ..._builtAdministrationItems(
-                        state.selectedIndex,
-                        state.isSidebarExtended,
-                      )
-                    ],
-                  ),
-                ),
-              ),
-              AnimatedPositioned(
-                duration: const Duration(milliseconds: 200),
-                child: Container(
-                  // width: MediaQuery.of(context).size.width - navbarWidth,
-                  margin: EdgeInsets.only(
-                    left: state.isSidebarExtended ? navbarWidth : 100,
-                  ),
-                  // color: navbarColor,
-                  decoration: BoxDecoration(
-                    gradient: gradient2,
-                  ),
-                  padding:
-                      const EdgeInsets.only(top: 20, bottom: 20, right: 20),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius:
-                          BorderRadius.circular(SidebarItemHeight / 4),
-                      color: Colors.white,
-                    ),
+                  child: SingleChildScrollView(
                     child: Column(
+                      crossAxisAlignment: state.isSidebarExtended
+                          ? CrossAxisAlignment.start
+                          : CrossAxisAlignment.center,
                       children: [
-                        Container(
-                          margin: const EdgeInsets.all(10),
+                        _buildLogo(state),
+                        SizedBox(
                           height: 50,
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 10,
-                            horizontal: 20,
-                          ),
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            gradient: gradient2,
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                List<SideBarItemModel>.from([
-                                  ...mainItems,
-                                  ...administrationItems
-                                ])[state.selectedIndex]
-                                    .label,
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 25,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              Container(
-                                alignment: Alignment.center,
-                                padding: const EdgeInsets.all(3),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                    color: Colors.white),
-                                child: Icon(
-                                  PhosphorIcons.user,
-                                  color: navbarColor,
-                                ),
-                              ),
-                            ],
-                          ),
+                          child:
+                              _buildCriteria(state.isSidebarExtended, 'MAIN'),
                         ),
+                        ..._buildSidebarItems(
+                          mainItems,
+                          state.selectedItemName,
+                          state.isSidebarExtended,
+                        ),
+                        SizedBox(
+                          height: 50,
+                          child: _buildCriteria(
+                              state.isSidebarExtended, 'ADMINISTRATION'),
+                        ),
+                        ..._buildSidebarItems(
+                          administrationItems,
+                          state.selectedItemName,
+                          state.isSidebarExtended,
+                        )
                       ],
                     ),
                   ),
                 ),
               ),
+              _buildBody(state),
               const CollapseButton(),
             ],
           ),
         );
       },
+    );
+  }
+
+  AnimatedPositioned _buildBody(ThemeState state) {
+    return AnimatedPositioned(
+      duration: const Duration(milliseconds: 200),
+      child: Container(
+        margin: EdgeInsets.only(
+          left: state.isSidebarExtended ? sidebarWidth : shrinkSidebarWidth,
+        ),
+        // color: sidebarColor,
+        decoration: BoxDecoration(
+          color: sidebarColor,
+        ),
+        padding: const EdgeInsets.only(
+          top: 20,
+          bottom: 20,
+          right: 20,
+        ),
+        child: Container(
+          decoration: const BoxDecoration(
+            color: Colors.white,
+          ),
+          child: Column(
+            children: [
+              Container(
+                margin: const EdgeInsets.all(5),
+                height: 50,
+                padding: const EdgeInsets.symmetric(
+                  vertical: 10,
+                  horizontal: 20,
+                ),
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  // borderRadius: BorderRadius.circular(20),
+                  color: sidebarColor,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      state.selectedItemName,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 25,
+                        fontWeight: FontWeight.bold,
+                        // fontFamily: 'Aclonica',
+                      ),
+                    ),
+                    Container(
+                      alignment: Alignment.center,
+                      padding: const EdgeInsets.all(3),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: Colors.white,
+                      ),
+                      child: Icon(
+                        PhosphorIcons.user,
+                        color: sidebarColor,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Padding _buildLogo(ThemeState state) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 30.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Image.asset('assets/images/safety_icon.png'),
+          state.isSidebarExtended
+              ? const SizedBox(
+                  width: 10,
+                )
+              : Container(),
+          state.isSidebarExtended
+              ? Text(
+                  'Safety ETA',
+                  style: const TextStyle(
+                    fontSize: 30,
+                    color: Colors.orangeAccent,
+                    fontWeight: FontWeight.bold,
+                  ),
+                )
+              : Container()
+        ],
+      ),
     );
   }
 }
@@ -299,7 +330,7 @@ class _CollapseButtonState extends State<CollapseButton> {
     return BlocBuilder<ThemeBloc, ThemeState>(
       builder: (context, state) {
         return AnimatedPositioned(
-          left: state.isSidebarExtended ? navbarWidth - 17 : 85,
+          left: state.isSidebarExtended ? sidebarWidth - 20 : 90,
           top: 80,
           duration: const Duration(milliseconds: 200),
           curve: Curves.fastOutSlowIn,
@@ -312,35 +343,30 @@ class _CollapseButtonState extends State<CollapseButton> {
               }
             },
             child: Container(
-              padding: const EdgeInsets.all(5),
+              padding: const EdgeInsets.only(
+                top: 3,
+                left: 5,
+                right: 5,
+                bottom: 7,
+              ),
               alignment: Alignment.center,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(25),
+                shape: BoxShape.circle,
                 color: Colors.white,
                 boxShadow: [
                   BoxShadow(
-                    color: navbarColor,
+                    color: sidebarColor,
                     offset: const Offset(1, 1),
                   )
                 ],
               ),
-              child: AnimatedCrossFade(
-                duration: const Duration(
-                  milliseconds: 200,
+              child: MouseRegion(
+                cursor: SystemMouseCursors.click,
+                child: Icon(
+                  PhosphorIcons.arrowsLeftRight,
+                  size: 25,
+                  color: sidebarColor,
                 ),
-                firstChild: Icon(
-                  PhosphorIcons.caretDoubleLeft,
-                  size: 20,
-                  color: navbarColor,
-                ),
-                secondChild: Icon(
-                  PhosphorIcons.caretDoubleRight,
-                  size: 20,
-                  color: navbarColor,
-                ),
-                crossFadeState: state.isSidebarExtended
-                    ? CrossFadeState.showFirst
-                    : CrossFadeState.showSecond,
               ),
             ),
           ),
@@ -354,19 +380,21 @@ class SidebarItem extends StatefulWidget {
   final IconData iconData;
   final VoidCallback onTap;
   final String label;
-  final int index;
+  final String selectedItemName;
   final Color color;
-  final int selectedIndex;
   final bool isSidebarExtended;
+  final List<SideBarItemModel> subItems;
+  final bool isSubItem;
   const SidebarItem({
     Key? key,
     required this.iconData,
     required this.label,
+    required this.selectedItemName,
     required this.onTap,
     required this.color,
-    required this.index,
-    required this.selectedIndex,
     required this.isSidebarExtended,
+    this.subItems = const [],
+    this.isSubItem = false,
   }) : super(key: key);
 
   @override
@@ -375,135 +403,286 @@ class SidebarItem extends StatefulWidget {
 
 class _SidebarItemState extends State<SidebarItem>
     with TickerProviderStateMixin {
-  late AnimationController controller1;
-  late AnimationController controller2;
-  late AnimationController controller3;
-
-  late Animation<double> anim1;
-  late Animation<double> anim2;
-  late Animation<double> anim3;
-  late Animation<double> anim4;
+  late AnimationController animationController;
+  late Animation<double> anim;
   late Animation<Color?> color;
+  bool isHover = false;
+  bool isSidebarItemExtended = false;
+  CustomPopupMenuController customPopupMenuController =
+      CustomPopupMenuController();
 
   @override
   void initState() {
     super.initState();
 
-    controller1 = AnimationController(
+    animationController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 250),
-    );
-    controller2 = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 275),
-    );
-
-    controller3 = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 200),
+      duration: Duration(
+        milliseconds:
+            context.read<ThemeBloc>().state.isSidebarExtended ? 200 : 100,
+      ),
     );
 
-    anim1 = Tween(begin: navbarWidth, end: navbarWidth - SidebarItemHeight / 4)
-        .animate(controller1);
-    anim2 = Tween(begin: navbarWidth, end: SidebarItemHeight / 4)
-        .animate(controller2);
-    anim3 = Tween(begin: navbarWidth, end: SidebarItemHeight / 2)
-        .animate(controller2);
+    anim = Tween(
+            begin: context.read<ThemeBloc>().state.isSidebarExtended
+                ? sidebarWidth
+                : shrinkSidebarWidth,
+            end: 20.0)
+        .animate(animationController);
 
-    anim4 = Tween(begin: navbarWidth, end: 100.0).animate(controller3);
-    color =
-        ColorTween(end: widget.color, begin: Colors.white).animate(controller2);
+    color = ColorTween(
+      end: widget.color,
+      begin: Colors.white,
+    ).animate(animationController);
 
-    controller1.addListener(() {
+    animationController.addListener(() {
       setState(() {});
     });
-
-    controller2.addListener(() {
-      setState(() {});
-    });
-
-    controller3.addListener(() {});
   }
 
   @override
   void didUpdateWidget(covariant SidebarItem oldWidget) {
     super.didUpdateWidget(oldWidget);
 
-    if (widget.selectedIndex != widget.index) {
-      controller1.reverse();
-      controller2.reverse();
+    if (widget.selectedItemName != widget.label) {
+      animationController.reverse();
     } else {
-      controller1.forward();
-      controller2.forward();
+      animationController.forward();
     }
+  }
 
-    if (widget.isSidebarExtended) {
-      controller3.forward();
-    } else {
-      controller3.reverse();
+  void _showPopupMenu(ThemeState state) {
+    if (widget.subItems.isNotEmpty && !state.isSidebarExtended) {
+      customPopupMenuController.showMenu();
+    }
+  }
+
+  void _hidePopupMenu(ThemeState state) {
+    if (widget.subItems.isNotEmpty && !state.isSidebarExtended) {
+      customPopupMenuController.hideMenu();
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => widget.onTap(),
-      child: Container(
-        color: Colors.transparent,
-        child: Stack(
-          children: [
-            CustomPaint(
-              painter: CurvePainter(
-                animValue3: anim1.value,
-                animValue2: anim2.value,
-                animValue1: anim3.value,
-                animValue4: anim4.value,
-              ),
-            ),
-            SizedBox(
-              height: SidebarItemHeight * 3 / 4,
-              width: navbarWidth,
-              child: Container(
-                padding: EdgeInsets.only(
-                  left: navbarWidth / 8 + SidebarItemHeight / 8 - 5.0,
-                  // right: navbarWidth / 4,
-                  top: 25,
-                ),
-                child: Row(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(5),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color: color.value,
-                      ),
-                      child: ClipRRect(
-                        child: Icon(
-                          widget.iconData,
-                          color: color.value == Colors.white
-                              ? widget.color
-                              : Colors.white,
-                        ),
-                      ),
+    return BlocConsumer<ThemeBloc, ThemeState>(
+      listener: (context, state) {
+        animationController.duration = Duration(
+            milliseconds:
+                context.read<ThemeBloc>().state.isSidebarExtended ? 200 : 100);
+        anim = Tween(
+                begin: context.read<ThemeBloc>().state.isSidebarExtended
+                    ? sidebarWidth
+                    : shrinkSidebarWidth,
+                end: sidebarItemHeight / 4)
+            .animate(animationController);
+        if (widget.label != state.selectedItemName &&
+            !widget.subItems
+                .map(
+                  (subItem) => subItem.label,
+                )
+                .contains(
+                  state.selectedItemName,
+                )) {
+          setState(() {
+            isSidebarItemExtended = false;
+          });
+        }
+
+        if (state.hoveredItemName != widget.label) {
+          _hidePopupMenu(state);
+        }
+      },
+      builder: (context, state) {
+        return MouseRegion(
+          cursor: SystemMouseCursors.click,
+          onEnter: (event) {
+            setState(() {
+              isHover = true;
+            });
+          },
+          onExit: (event) {
+            setState(() {
+              isHover = false;
+            });
+          },
+          child: Column(
+            children: [
+              CustomPopupMenu(
+                controller: customPopupMenuController,
+                menuBuilder: () => MouseRegion(
+                  onExit: (event) {
+                    _hidePopupMenu(state);
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: sidebarColor,
                     ),
-                    widget.isSidebarExtended
-                        ? const SizedBox(
-                            width: 10,
-                          )
-                        : Container(),
-                    widget.isSidebarExtended
-                        ? Text(
+                    padding: const EdgeInsets.symmetric(vertical: 30),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(
+                            left: 40.0,
+                          ),
+                          child: Text(
                             widget.label,
-                            style: TextStyle(
-                              color: color.value,
-                            ),
-                          )
-                        : Container(),
-                  ],
+                            style: const TextStyle(
+                                color: Color(0xff92959a),
+                                fontSize: 22,
+                                fontWeight: FontWeight.w600),
+                          ),
+                        ),
+                        ..._buildSubItemsMenu(),
+                      ],
+                    ),
+                  ),
+                ),
+                barrierColor: Colors.transparent,
+                pressType: PressType.longPress,
+                showArrow: false,
+                horizontalMargin: shrinkSidebarWidth + 5,
+                verticalMargin: -sidebarItemHeight + 20,
+                child: _buildItemBody(state),
+              ),
+              ...(state.isSidebarExtended && isSidebarItemExtended
+                  ? _buildSubItemsMenu()
+                  : []),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  List<Widget> _buildSubItemsMenu() {
+    final state = context.read<ThemeBloc>().state;
+
+    return widget.subItems
+        .map(
+          (subItem) => SidebarItem(
+            iconData: subItem.iconData,
+            label: subItem.label,
+            selectedItemName: state.selectedItemName,
+            onTap: () {
+              context.read<ThemeBloc>().add(
+                    ThemeSidebarSelected(
+                      selectedItemName: subItem.label,
+                    ),
+                  );
+            },
+            color: subItem.color,
+            isSidebarExtended: state.isSidebarExtended,
+            isSubItem: true,
+          ),
+        )
+        .toList();
+  }
+
+  Widget _buildExtendIcon() {
+    return context.read<ThemeBloc>().state.isSidebarExtended &&
+            widget.subItems.isNotEmpty
+        ? Padding(
+            padding: const EdgeInsets.only(right: 20),
+            child: Icon(
+              isSidebarItemExtended
+                  ? Icons.keyboard_arrow_down
+                  : Icons.keyboard_arrow_right,
+              color: isHover ? widget.color : color.value,
+              size: 28,
+            ),
+          )
+        : Container();
+  }
+
+  Widget _buildItemBody(ThemeState state) {
+    return GestureDetector(
+      onTap: () {
+        widget.onTap();
+        setState(() {
+          isSidebarItemExtended = !isSidebarItemExtended;
+        });
+      },
+      child: MouseRegion(
+        onEnter: (event) {
+          if (!widget.isSubItem) {
+            context.read<ThemeBloc>().add(
+                  ThemeSidebarHovered(hoveredItemName: widget.label),
+                );
+            _showPopupMenu(state);
+          }
+        },
+        child: Container(
+          color: Colors.transparent,
+          padding: EdgeInsets.only(
+            left: widget.isSubItem && state.isSidebarExtended ? 30 : 0,
+          ),
+          child: Stack(
+            children: [
+              state.isSidebarExtended
+                  ? CustomPaint(
+                      painter: CurvePainter(
+                        animValue: anim.value,
+                        width: sidebarWidth,
+                      ),
+                    )
+                  : widget.isSubItem
+                      ? SizedBox(
+                          width: sidebarWidth,
+                        )
+                      : CustomPaint(
+                          painter: CurvePainter(
+                            animValue: anim.value,
+                            width: shrinkSidebarWidth,
+                          ),
+                        ),
+              SizedBox(
+                height: sidebarItemHeight,
+                width: sidebarWidth,
+                child: Container(
+                  padding: EdgeInsets.only(
+                    left: sidebarWidth / 8 + sidebarItemHeight / 8 - 5.0,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Row(
+                        children: [
+                          Icon(
+                            widget.iconData,
+                            color: color.value == Colors.white
+                                ? isHover
+                                    ? Colors.white
+                                    : widget.color.withOpacity(0.9)
+                                : widget.color,
+                            size: 30,
+                          ),
+                          widget.isSidebarExtended || widget.isSubItem
+                              ? const SizedBox(
+                                  width: 10,
+                                )
+                              : Container(),
+                          widget.isSidebarExtended || widget.isSubItem
+                              ? Text(
+                                  widget.label,
+                                  style: TextStyle(
+                                    color: isHover ? widget.color : color.value,
+                                    fontSize: 18,
+                                  ),
+                                )
+                              : Container(),
+                        ],
+                      ),
+                      _buildExtendIcon()
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -511,41 +690,28 @@ class _SidebarItemState extends State<SidebarItem>
 }
 
 class CurvePainter extends CustomPainter {
-  final double animValue1;
-  final double animValue2;
-  final double animValue3;
-  final double animValue4;
+  final double animValue;
+  final double width;
   CurvePainter({
-    required this.animValue1,
-    required this.animValue2,
-    required this.animValue3,
-    required this.animValue4,
+    required this.animValue,
+    required this.width,
   });
 
   @override
   void paint(Canvas canvas, Size size) {
-    print(animValue4);
     Path path = Path();
     Paint paint = Paint();
 
     paint.color = Colors.white;
-    path.moveTo(navbarWidth, 0);
-    path.quadraticBezierTo(
-        navbarWidth, SidebarItemHeight / 4, animValue3, SidebarItemHeight / 4);
-    path.lineTo(animValue1, SidebarItemHeight / 4);
-    path.quadraticBezierTo(
-        animValue2, SidebarItemHeight / 4, animValue2, SidebarItemHeight / 2);
-    path.lineTo(navbarWidth, SidebarItemHeight / 2);
-    path.close();
-
-    path.moveTo(navbarWidth, SidebarItemHeight);
-    path.quadraticBezierTo(navbarWidth, SidebarItemHeight * 3 / 4, animValue3,
-        SidebarItemHeight * 3 / 4);
-    path.lineTo(animValue1, SidebarItemHeight * 3 / 4);
-    path.quadraticBezierTo(animValue2, SidebarItemHeight * 3 / 4, animValue2,
-        SidebarItemHeight / 2);
-    path.lineTo(navbarWidth, SidebarItemHeight / 2);
-    path.close();
+    path.addRect(
+      Rect.fromPoints(
+        Offset(animValue, 0),
+        Offset(
+          width,
+          sidebarItemHeight,
+        ),
+      ),
+    );
 
     canvas.drawPath(path, paint);
   }
