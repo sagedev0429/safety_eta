@@ -1,7 +1,6 @@
 import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 import 'bloc/theme_bloc.dart';
@@ -144,8 +143,9 @@ class _AppState extends State<App> {
               label,
               style: const TextStyle(
                 color: Color(0xff92959a),
-                fontSize: 20,
-                fontWeight: FontWeight.w600,
+                fontSize: 14,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'Roboto',
               ),
             ),
           )
@@ -170,7 +170,6 @@ class _AppState extends State<App> {
                 height: MediaQuery.of(context).size.height,
                 width:
                     state.isSidebarExtended ? sidebarWidth : shrinkSidebarWidth,
-                // color: sidebarColor,
                 child: Padding(
                   padding: const EdgeInsets.only(top: 20),
                   child: SingleChildScrollView(
@@ -245,7 +244,6 @@ class _AppState extends State<App> {
                 ),
                 width: double.infinity,
                 decoration: BoxDecoration(
-                  // borderRadius: BorderRadius.circular(20),
                   color: sidebarColor,
                 ),
                 child: Row(
@@ -255,9 +253,9 @@ class _AppState extends State<App> {
                       state.selectedItemName,
                       style: const TextStyle(
                         color: Colors.white,
-                        fontSize: 25,
-                        fontWeight: FontWeight.bold,
-                        // fontFamily: 'Aclonica',
+                        fontSize: 18,
+                        fontFamily: 'Roboto',
+                        fontWeight: FontWeight.w800
                       ),
                     ),
                     Container(
@@ -295,12 +293,13 @@ class _AppState extends State<App> {
                 )
               : Container(),
           state.isSidebarExtended
-              ? Text(
+              ? const Text(
                   'Safety ETA',
-                  style: const TextStyle(
-                    fontSize: 30,
+                  style: TextStyle(
+                    fontSize: 24,
                     color: Colors.orangeAccent,
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w800,
+                    fontFamily: 'Roboto',
                   ),
                 )
               : Container()
@@ -530,9 +529,11 @@ class _SidebarItemState extends State<SidebarItem>
                           child: Text(
                             widget.label,
                             style: const TextStyle(
-                                color: Color(0xff92959a),
-                                fontSize: 22,
-                                fontWeight: FontWeight.w600),
+                              color: Color(0xff92959a),
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: 'Roboto'
+                            ),
                           ),
                         ),
                         ..._buildSubItemsMenu(),
@@ -670,7 +671,9 @@ class _SidebarItemState extends State<SidebarItem>
                                   widget.label,
                                   style: TextStyle(
                                     color: isHover ? widget.color : color.value,
-                                    fontSize: 18,
+                                    fontSize: 14,
+                                    fontFamily: 'Roboto',
+                                    fontWeight: FontWeight.bold,
                                   ),
                                 )
                               : Container(),
