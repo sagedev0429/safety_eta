@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 
-class SideBarItemModel {
+class SidebarItemModel {
   final IconData iconData;
   final Color color;
   final String label;
-  final List<SideBarItemModel> subItems;
-  SideBarItemModel({
+  final List<SidebarItemModel> subItems;
+  final Widget body;
+  SidebarItemModel({
     required this.iconData,
     required this.color,
     required this.label,
-    this.subItems = const <SideBarItemModel>[],
+    this.subItems = const <SidebarItemModel>[],
+    this.body = const Placeholder(),
   });
 }
