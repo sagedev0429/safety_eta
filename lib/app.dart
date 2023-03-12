@@ -6,8 +6,8 @@ import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'bloc/theme_bloc.dart';
 import 'model/sidebar_item.dart';
 
-double sidebarWidth = 350;
-double shrinkSidebarWidth = 110;
+double sidebarWidth = 250;
+double shrinkSidebarWidth = 80;
 double sidebarItemHeight = 50;
 Color sidebarColor = const Color(0xff252b36);
 
@@ -149,10 +149,13 @@ class _AppState extends State<App> {
               ),
             ),
           )
-        : const Icon(
-            PhosphorIcons.dotsThree,
-            size: 30,
-            color: Colors.white,
+        : const Padding(
+            padding: EdgeInsets.only(left: 10),
+            child: Icon(
+              PhosphorIcons.dotsThree,
+              size: 30,
+              color: const Color(0xfff1f4f9),
+            ),
           );
   }
 
@@ -231,7 +234,7 @@ class _AppState extends State<App> {
         ),
         child: Container(
           decoration: const BoxDecoration(
-            color: Colors.white,
+            color: const Color(0xfff1f4f9),
           ),
           child: Column(
             children: [
@@ -252,10 +255,10 @@ class _AppState extends State<App> {
                     Text(
                       state.selectedItemName,
                       style: const TextStyle(
-                        color: Colors.white,
+                        color: const Color(0xfff1f4f9),
                         fontSize: 18,
                         fontFamily: 'Roboto',
-                        fontWeight: FontWeight.w800
+                        fontWeight: FontWeight.w800,
                       ),
                     ),
                     Container(
@@ -263,7 +266,7 @@ class _AppState extends State<App> {
                       padding: const EdgeInsets.all(3),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
-                        color: Colors.white,
+                        color: const Color(0xfff1f4f9),
                       ),
                       child: Icon(
                         PhosphorIcons.user,
@@ -329,7 +332,9 @@ class _CollapseButtonState extends State<CollapseButton> {
     return BlocBuilder<ThemeBloc, ThemeState>(
       builder: (context, state) {
         return AnimatedPositioned(
-          left: state.isSidebarExtended ? sidebarWidth - 20 : 90,
+          left: state.isSidebarExtended
+              ? sidebarWidth - 15
+              : shrinkSidebarWidth - 15,
           top: 80,
           duration: const Duration(milliseconds: 200),
           curve: Curves.fastOutSlowIn,
@@ -351,7 +356,7 @@ class _CollapseButtonState extends State<CollapseButton> {
               alignment: Alignment.center,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: Colors.white,
+                color: const Color(0xfff1f4f9),
                 boxShadow: [
                   BoxShadow(
                     color: sidebarColor,
@@ -362,8 +367,9 @@ class _CollapseButtonState extends State<CollapseButton> {
               child: MouseRegion(
                 cursor: SystemMouseCursors.click,
                 child: Icon(
-                  PhosphorIcons.arrowsLeftRight,
-                  size: 25,
+                  PhosphorIcons.arrowsLeftRightLight,
+                  size: 18,
+                  weight: 400,
                   color: sidebarColor,
                 ),
               ),
@@ -431,7 +437,7 @@ class _SidebarItemState extends State<SidebarItem>
 
     color = ColorTween(
       end: widget.color,
-      begin: Colors.white,
+      begin: const Color(0xfff1f4f9),
     ).animate(animationController);
 
     animationController.addListener(() {
@@ -524,7 +530,7 @@ class _SidebarItemState extends State<SidebarItem>
                       children: [
                         Padding(
                           padding: const EdgeInsets.only(
-                            left: 40.0,
+                            left: 30.0,
                           ),
                           child: Text(
                             widget.label,
@@ -532,7 +538,7 @@ class _SidebarItemState extends State<SidebarItem>
                               color: Color(0xff92959a),
                               fontSize: 14,
                               fontWeight: FontWeight.bold,
-                              fontFamily: 'Roboto'
+                              fontFamily: 'Roboto',
                             ),
                           ),
                         ),
@@ -591,7 +597,7 @@ class _SidebarItemState extends State<SidebarItem>
               isSidebarItemExtended
                   ? Icons.keyboard_arrow_down
                   : Icons.keyboard_arrow_right,
-              color: isHover ? widget.color : color.value,
+              color: const Color(0xfff1f4f9),
               size: 28,
             ),
           )
@@ -618,7 +624,7 @@ class _SidebarItemState extends State<SidebarItem>
         child: Container(
           color: Colors.transparent,
           padding: EdgeInsets.only(
-            left: widget.isSubItem && state.isSidebarExtended ? 30 : 0,
+            left: widget.isSubItem && state.isSidebarExtended ? 15 : 0,
           ),
           child: Stack(
             children: [
@@ -651,15 +657,19 @@ class _SidebarItemState extends State<SidebarItem>
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Icon(
-                            widget.iconData,
-                            color: color.value == Colors.white
-                                ? isHover
-                                    ? Colors.white
-                                    : widget.color.withOpacity(0.9)
-                                : widget.color,
-                            size: 30,
+                          Container(
+                            alignment: Alignment.center,
+                            child: Icon(
+                              widget.iconData,
+                              color: color.value == const Color(0xfff1f4f9)
+                                  ? isHover
+                                      ? const Color(0xfff1f4f9)
+                                      : widget.color.withOpacity(0.9)
+                                  : widget.color,
+                              size: 22,
+                            ),
                           ),
                           widget.isSidebarExtended || widget.isSubItem
                               ? const SizedBox(
@@ -667,13 +677,21 @@ class _SidebarItemState extends State<SidebarItem>
                                 )
                               : Container(),
                           widget.isSidebarExtended || widget.isSubItem
-                              ? Text(
-                                  widget.label,
-                                  style: TextStyle(
-                                    color: isHover ? widget.color : color.value,
-                                    fontSize: 14,
-                                    fontFamily: 'Roboto',
-                                    fontWeight: FontWeight.bold,
+                              ? Container(
+                                  alignment: Alignment.center,
+                                  margin: const EdgeInsets.only(top: 5),
+                                  child: Text(
+                                    widget.label,
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      color: widget.selectedItemName ==
+                                              widget.label
+                                          ? widget.color
+                                          : const Color(0xfff1f4f9),
+                                      fontSize: 12,
+                                      fontFamily: 'Roboto',
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                 )
                               : Container(),
@@ -705,7 +723,7 @@ class CurvePainter extends CustomPainter {
     Path path = Path();
     Paint paint = Paint();
 
-    paint.color = Colors.white;
+    paint.color = const Color(0xfff1f4f9);
     path.addRect(
       Rect.fromPoints(
         Offset(animValue, 0),
