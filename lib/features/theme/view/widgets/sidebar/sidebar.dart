@@ -1,7 +1,9 @@
+import 'package:animated_sidebar/features/features.dart';
 import 'package:animated_sidebar/features/theme/data/repository/sidebar_repository.dart';
 import 'package:animated_sidebar/features/theme/view/widgets/sidebar/sidebar_widgets/criteria.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../bloc/theme_bloc.dart';
 import '../../../data/model/model.dart';
@@ -15,8 +17,12 @@ class Sidebar extends StatefulWidget {
   const Sidebar({
     super.key,
     required this.body,
+    required this.selectedItemName,
+    required this.title,
   });
   final Widget body;
+  final String selectedItemName;
+  final String title;
 
   @override
   State<Sidebar> createState() => _SidebarState();
@@ -36,7 +42,7 @@ class _SidebarState extends State<Sidebar> {
           label: items[i].label,
           path: items[i].path,
           color: items[i].color,
-          selectedItemName: context.read<ThemeBloc>().state.selectedItemName,
+          selectedItemName: selectedItemName,
           isSidebarExtended: isSidebarExtended,
           subItems: items[i].subItems,
         ),
@@ -48,7 +54,7 @@ class _SidebarState extends State<Sidebar> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ThemeBloc, ThemeState>(
-      builder: (context, state) {
+      builder: (ctx, state) {
         return Scaffold(
           body: Stack(
             children: [
@@ -77,7 +83,7 @@ class _SidebarState extends State<Sidebar> {
                         ),
                         ..._buildSidebarItems(
                           SidebarRepsitory.mainItems,
-                          state.selectedItemName,
+                          widget.selectedItemName,
                           state.isSidebarExtended,
                         ),
                         SizedBox(
@@ -89,7 +95,7 @@ class _SidebarState extends State<Sidebar> {
                         ),
                         ..._buildSidebarItems(
                           SidebarRepsitory.administrationItems,
-                          state.selectedItemName,
+                          widget.selectedItemName,
                           state.isSidebarExtended,
                         )
                       ],
@@ -130,7 +136,7 @@ class _SidebarState extends State<Sidebar> {
           child: Column(
             children: [
               Topbar(
-                title: state.selectedItemName,
+                title: widget.title,
               ),
               Container(
                 padding: const EdgeInsets.all(15),

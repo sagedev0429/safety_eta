@@ -3,16 +3,16 @@ part of 'theme_bloc.dart';
 class ThemeState extends Equatable {
   const ThemeState(
       {this.isSidebarExtended = true,
-      this.selectedItemName = 'Dashboard',
+      // this.selectedItemName = 'Dashboard',
       this.hoveredItemName = ''});
   final bool isSidebarExtended;
-  final String selectedItemName;
+  // final String selectedItemName;
   final String hoveredItemName;
 
   @override
   List<Object> get props => [
         isSidebarExtended,
-        selectedItemName,
+        // selectedItemName,
         hoveredItemName,
       ];
 
@@ -23,7 +23,7 @@ class ThemeState extends Equatable {
   }) {
     return ThemeState(
       isSidebarExtended: isSidebarExtended ?? this.isSidebarExtended,
-      selectedItemName: selectedItemName ?? this.selectedItemName,
+      // selectedItemName: selectedItemName ?? this.selectedItemName,
       hoveredItemName: hoveredItemName ?? this.hoveredItemName,
     );
   }
@@ -31,7 +31,7 @@ class ThemeState extends Equatable {
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'isSidebarExtended': isSidebarExtended,
-      'selectedItemName': selectedItemName,
+      // 'selectedItemName': selectedItemName,
       'hoveredItemName': '',
     };
   }
@@ -39,7 +39,7 @@ class ThemeState extends Equatable {
   factory ThemeState.fromMap(Map<String, dynamic> map) {
     return ThemeState(
       isSidebarExtended: map['isSidebarExtended'] as bool,
-      selectedItemName: map['selectedItemName'] as String,
+      // selectedItemName: map['selectedItemName'] as String,
       hoveredItemName: map['hoveredItemName'] as String,
     );
   }

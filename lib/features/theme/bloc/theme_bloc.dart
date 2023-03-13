@@ -14,11 +14,11 @@ class ThemeBloc extends HydratedBloc<ThemeEvent, ThemeState> {
       emit(state.copyWith(isSidebarExtended: false));
     });
 
-    on<ThemeSidebarSelected>(
-      (event, emit) {
-        emit(state.copyWith(selectedItemName: event.selectedItemName));
-      },
-    );
+    // on<ThemeSidebarSelected>(
+    //   (event, emit) {
+    //     emit(state.copyWith(selectedItemName: event.selectedItemName));
+    //   },
+    // );
 
     on<ThemeSidebarHovered>(
       (event, emit) {

@@ -34,7 +34,6 @@ class MyApp extends StatelessWidget {
   }
 }
 
-
 setupHydratedLocalStorage() async {
   HydratedBloc.storage = await HydratedStorage.build(
     storageDirectory: HydratedStorage.webStorageDirectory,
