@@ -2,16 +2,18 @@ import 'package:flutter/material.dart';
 
 import 'view/widgets/sidebar/sidebar.dart';
 
-class Layout extends StatefulWidget {
-  const Layout({super.key});
+class Layout extends StatelessWidget {
+  const Layout({
+    super.key,
+    required this.body,
+  });
 
-  @override
-  State<Layout> createState() => _LayoutState();
-}
+  final Widget body;
 
-class _LayoutState extends State<Layout> {
   @override
   Widget build(BuildContext context) {
-    return Sidebar();
+    return Sidebar(
+      body: body,
+    );
   }
 }

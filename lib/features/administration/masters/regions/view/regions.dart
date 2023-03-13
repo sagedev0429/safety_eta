@@ -1,3 +1,4 @@
+import 'package:animated_sidebar/features/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class Regions extends StatefulWidget {
@@ -10,6 +11,8 @@ class Regions extends StatefulWidget {
 class _RegionsState extends State<Regions> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Layout(
+      body: Container(child: Text('Regions')),
+    );
   }
 }

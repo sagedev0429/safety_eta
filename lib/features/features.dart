@@ -1,1 +1,1 @@
-export 'masters/regions/regions.dart';
+export 'administration/masters/regions/regions.dart';

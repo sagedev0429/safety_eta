@@ -14,7 +14,9 @@ import 'sidebar_widgets/sidebar_item.dart';
 class Sidebar extends StatefulWidget {
   const Sidebar({
     super.key,
+    required this.body,
   });
+  final Widget body;
 
   @override
   State<Sidebar> createState() => _SidebarState();
@@ -32,17 +34,11 @@ class _SidebarState extends State<Sidebar> {
         SidebarItem(
           iconData: items[i].iconData,
           label: items[i].label,
+          path: items[i].path,
           color: items[i].color,
           selectedItemName: context.read<ThemeBloc>().state.selectedItemName,
           isSidebarExtended: isSidebarExtended,
           subItems: items[i].subItems,
-          onTap: () {
-            context.read<ThemeBloc>().add(
-                  ThemeSidebarSelected(
-                    selectedItemName: items[i].label,
-                  ),
-                );
-          },
         ),
       );
     }
@@ -80,7 +76,7 @@ class _SidebarState extends State<Sidebar> {
                           ),
                         ),
                         ..._buildSidebarItems(
-                          SideBarRepsitory.mainItems,
+                          SidebarRepsitory.mainItems,
                           state.selectedItemName,
                           state.isSidebarExtended,
                         ),
@@ -92,7 +88,7 @@ class _SidebarState extends State<Sidebar> {
                           ),
                         ),
                         ..._buildSidebarItems(
-                          SideBarRepsitory.administrationItems,
+                          SidebarRepsitory.administrationItems,
                           state.selectedItemName,
                           state.isSidebarExtended,
                         )
@@ -119,7 +115,6 @@ class _SidebarState extends State<Sidebar> {
         margin: EdgeInsets.only(
           left: state.isSidebarExtended ? sidebarWidth : shrinkSidebarWidth,
         ),
-        // color: sidebarColor,
         decoration: BoxDecoration(
           color: sidebarColor,
         ),
@@ -139,13 +134,14 @@ class _SidebarState extends State<Sidebar> {
               ),
               Container(
                 padding: const EdgeInsets.all(15),
-                child: [
-                  ...SideBarRepsitory.mainItems,
-                  ...SideBarRepsitory.administrationItems
-                ]
-                    .firstWhere((sidebarItem) =>
-                        sidebarItem.label == state.selectedItemName)
-                    .body,
+                // child: [
+                //   ...SideBarRepsitory.mainItems,
+                //   ...SideBarRepsitory.administrationItems
+                // ]
+                //     .firstWhere((sidebarItem) =>
+                //         sidebarItem.label == state.selectedItemName)
+                //     .body,
+                child: widget.body,
               )
             ],
           ),

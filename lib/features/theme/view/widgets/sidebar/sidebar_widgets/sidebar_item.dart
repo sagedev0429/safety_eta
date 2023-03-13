@@ -1,6 +1,7 @@
 import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../bloc/theme_bloc.dart';
 import '../../../../data/model/model.dart';
@@ -8,8 +9,8 @@ import '../sidebar_style.dart';
 
 class SidebarItem extends StatefulWidget {
   final IconData iconData;
-  final VoidCallback onTap;
   final String label;
+  final String path;
   final String selectedItemName;
   final Color color;
   final bool isSidebarExtended;
@@ -19,8 +20,8 @@ class SidebarItem extends StatefulWidget {
     Key? key,
     required this.iconData,
     required this.label,
+    required this.path,
     required this.selectedItemName,
-    required this.onTap,
     required this.color,
     required this.isSidebarExtended,
     this.subItems = const [],
@@ -197,14 +198,8 @@ class _SidebarItemState extends State<SidebarItem>
           (subItem) => SidebarItem(
             iconData: subItem.iconData,
             label: subItem.label,
+            path: subItem.path,
             selectedItemName: state.selectedItemName,
-            onTap: () {
-              context.read<ThemeBloc>().add(
-                    ThemeSidebarSelected(
-                      selectedItemName: subItem.label,
-                    ),
-                  );
-            },
             color: subItem.color,
             isSidebarExtended: state.isSidebarExtended,
             isSubItem: true,
@@ -213,16 +208,15 @@ class _SidebarItemState extends State<SidebarItem>
         .toList();
   }
 
-  Widget _buildExtendIcon() {
-    return context.read<ThemeBloc>().state.isSidebarExtended &&
-            widget.subItems.isNotEmpty
+  Widget _buildExtendIcon(ThemeState state) {
+    return state.isSidebarExtended && widget.subItems.isNotEmpty
         ? Padding(
             padding: const EdgeInsets.only(right: 20),
             child: Icon(
               isSidebarItemExtended
                   ? Icons.keyboard_arrow_down
                   : Icons.keyboard_arrow_right,
-              color: backgroundColor,
+              color: isSidebarItemExtended ? widget.color : backgroundColor,
               size: 28,
             ),
           )
@@ -232,7 +226,15 @@ class _SidebarItemState extends State<SidebarItem>
   Widget _buildItemBody(ThemeState state) {
     return GestureDetector(
       onTap: () {
-        widget.onTap();
+        context.read<ThemeBloc>().add(
+              ThemeSidebarSelected(
+                selectedItemName: widget.label,
+              ),
+            );
+        if (widget.path.isNotEmpty) {
+          GoRouter.of(context).go('/${widget.path}');
+        }
+
         setState(() {
           isSidebarItemExtended = !isSidebarItemExtended;
         });
@@ -322,7 +324,7 @@ class _SidebarItemState extends State<SidebarItem>
                               : Container(),
                         ],
                       ),
-                      _buildExtendIcon()
+                      _buildExtendIcon(state)
                     ],
                   ),
                 ),
