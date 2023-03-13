@@ -1,6 +1,9 @@
-import '/model/entity.dart';
+import 'package:equatable/equatable.dart';
 
-class Region extends Entity {
+import '/data/model/entity.dart';
+
+
+class Region extends Entity implements Equatable {
   final String regionName;
   final String timezonesAssociated;
   final bool active;
@@ -22,9 +25,9 @@ class Region extends Entity {
   @override
   Map<String, dynamic> tableItemsToMap() {
     return <String, dynamic>{
-      'regionName': regionName,
-      'timezonesAssociated': timezonesAssociated,
-      'active': active,
+      'Region Name': regionName,
+      'Time Zones Associated': timezonesAssociated,
+      'Active': active,
     };
   }
 
@@ -43,4 +46,15 @@ class Region extends Entity {
       active: map['active'] as bool,
     );
   }
+
+  @override
+  // TODO: implement props
+  List<Object?> get props => [
+        regionName,
+        timezonesAssociated,
+        active,
+      ];
+
+  @override
+  bool? get stringify => throw UnimplementedError();
 }

@@ -1,0 +1,1 @@
+export '../../features/administration/masters/regions/data/repository/regions_repository.dart';

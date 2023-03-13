@@ -1,8 +1,8 @@
-import 'package:animated_sidebar/features/theme/bloc/theme_bloc.dart';
 import 'package:animated_sidebar/router.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hydrated_bloc/hydrated_bloc.dart';
+
+import 'data/bloc/bloc.dart';
+import 'data/repository/repository.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,19 +16,32 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
+    return MultiRepositoryProvider(
       providers: [
-        BlocProvider(
-          create: (context) => ThemeBloc(),
+        RepositoryProvider(
+          create: (context) => RegionsRepository(),
         ),
       ],
-      child: MaterialApp.router(
-        title: 'ETA',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (context) => ThemeBloc(),
+          ),
+          BlocProvider(
+            create: (context) => RegionsBloc(
+              regionsRepository:
+                  RepositoryProvider.of<RegionsRepository>(context),
+            ),
+          ),
+        ],
+        child: MaterialApp.router(
+          title: 'ETA',
+          theme: ThemeData(
+            primarySwatch: Colors.blue,
+          ),
+          debugShowCheckedModeBanner: false,
+          routerConfig: router,
         ),
-        debugShowCheckedModeBanner: false,
-        routerConfig: router,
       ),
     );
   }

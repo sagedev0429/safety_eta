@@ -1,7 +1,7 @@
-import '../model/regions.dart';
+import '../model/region.dart';
 
-class RegionRepository {
-  List<Region> getRegions() {
+class RegionsRepository {
+  Future<List<Region>> getRegions() async {
     return <Region>[
       Region(
         regionName: 'North America',

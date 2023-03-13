@@ -1,3 +1,4 @@
+import 'package:animated_sidebar/features/administration/masters/widgets/crud.dart';
 import 'package:flutter/material.dart';
 
 class PriorityLevels extends StatefulWidget {
@@ -10,6 +11,9 @@ class PriorityLevels extends StatefulWidget {
 class _PriorityLevelsState extends State<PriorityLevels> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Crud(
+      description:
+          'List of defined Priority Levels. Types can be added or current ones edited from this screen.',
+    );
   }
 }
