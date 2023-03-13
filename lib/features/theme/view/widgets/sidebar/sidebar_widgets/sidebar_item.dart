@@ -46,6 +46,11 @@ class _SidebarItemState extends State<SidebarItem>
   void initState() {
     super.initState();
 
+    setState(() {
+      isSidebarItemExtended = widget.subItems.map((e) => e.path).contains(
+            widget.selectedItemName,
+          );
+    });
     animationController = AnimationController(
       vsync: this,
       duration: Duration(
@@ -69,13 +74,18 @@ class _SidebarItemState extends State<SidebarItem>
     animationController.addListener(() {
       setState(() {});
     });
+    if (widget.selectedItemName != widget.path) {
+      animationController.reverse();
+    } else {
+      animationController.forward();
+    }
   }
 
   @override
   void didUpdateWidget(covariant SidebarItem oldWidget) {
     super.didUpdateWidget(oldWidget);
 
-    if (widget.selectedItemName != widget.label) {
+    if (widget.selectedItemName != widget.path) {
       animationController.reverse();
     } else {
       animationController.forward();
@@ -107,18 +117,6 @@ class _SidebarItemState extends State<SidebarItem>
                     : shrinkSidebarWidth,
                 end: sidebarItemHeight / 4)
             .animate(animationController);
-        if (widget.label != state.selectedItemName &&
-            !widget.subItems
-                .map(
-                  (subItem) => subItem.label,
-                )
-                .contains(
-                  state.selectedItemName,
-                )) {
-          setState(() {
-            isSidebarItemExtended = false;
-          });
-        }
 
         if (state.hoveredItemName != widget.label) {
           _hidePopupMenu(state);
@@ -199,7 +197,7 @@ class _SidebarItemState extends State<SidebarItem>
             iconData: subItem.iconData,
             label: subItem.label,
             path: subItem.path,
-            selectedItemName: state.selectedItemName,
+            selectedItemName: widget.selectedItemName,
             color: subItem.color,
             isSidebarExtended: state.isSidebarExtended,
             isSubItem: true,
@@ -226,11 +224,6 @@ class _SidebarItemState extends State<SidebarItem>
   Widget _buildItemBody(ThemeState state) {
     return GestureDetector(
       onTap: () {
-        context.read<ThemeBloc>().add(
-              ThemeSidebarSelected(
-                selectedItemName: widget.label,
-              ),
-            );
         if (widget.path.isNotEmpty) {
           GoRouter.of(context).go('/${widget.path}');
         }
@@ -311,10 +304,10 @@ class _SidebarItemState extends State<SidebarItem>
                                     widget.label,
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
-                                      color: widget.selectedItemName ==
-                                              widget.label
-                                          ? widget.color
-                                          : backgroundColor,
+                                      color:
+                                          widget.selectedItemName == widget.path
+                                              ? widget.color
+                                              : backgroundColor,
                                       fontSize: 12,
                                       fontFamily: 'Roboto',
                                       fontWeight: FontWeight.bold,
