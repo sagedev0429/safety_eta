@@ -6,3 +6,5 @@ abstract class PriorityLevelsEvent extends Equatable {
   @override
   List<Object> get props => [];
 }
+
+class PriorityLevelsRetrieved extends PriorityLevelsEvent {}

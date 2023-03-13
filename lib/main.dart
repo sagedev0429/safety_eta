@@ -21,6 +21,12 @@ class MyApp extends StatelessWidget {
         RepositoryProvider(
           create: (context) => RegionsRepository(),
         ),
+        RepositoryProvider(
+          create: (context) => PriorityLevelsRepository(),
+        ),
+        RepositoryProvider(
+          create: (context) => ObservationTypesRepository(),
+        )
       ],
       child: MultiBlocProvider(
         providers: [
@@ -31,6 +37,18 @@ class MyApp extends StatelessWidget {
             create: (context) => RegionsBloc(
               regionsRepository:
                   RepositoryProvider.of<RegionsRepository>(context),
+            ),
+          ),
+          BlocProvider(
+            create: (context) => PriorityLevelsBloc(
+              priorityLevelsRepository:
+                  RepositoryProvider.of<PriorityLevelsRepository>(context),
+            ),
+          ),
+          BlocProvider(
+            create: (context) => ObservationTypesBloc(
+              observationTypesRepository:
+                  RepositoryProvider.of<ObservationTypesRepository>(context),
             ),
           ),
         ],

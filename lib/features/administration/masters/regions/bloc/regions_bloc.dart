@@ -20,10 +20,9 @@ class RegionsBloc extends Bloc<RegionsEvent, RegionsState> {
     emit(state.copyWith(status: EntityStatus.loading));
     try {
       List<Region> regions = await regionsRepository.getRegions();
-      emit(state.copyWith(regions: regions));
+      emit(state.copyWith(regions: regions, status: EntityStatus.succuess));
     } catch (e) {
       emit(state.copyWith(status: EntityStatus.failure));
     }
-    emit(state.copyWith(status: EntityStatus.succuess));
   }
 }

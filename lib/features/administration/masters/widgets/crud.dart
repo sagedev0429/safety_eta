@@ -19,38 +19,41 @@ class Crud extends StatefulWidget {
 
 class _CrudState extends State<Crud> {
   List<DataColumn> _buildColumns() {
-    return [
-      ...widget.entities[0]
-          .tableItemsToMap()
-          .keys
-          .map(
-            (key) => DataColumn(
-              label: Expanded(
-                child: Text(
-                  key,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                    fontFamily: 'OpenSans',
+    if (widget.entities.isNotEmpty) {
+      return [
+        ...widget.entities[0]
+            .tableItemsToMap()
+            .keys
+            .map(
+              (key) => DataColumn(
+                label: Expanded(
+                  child: Text(
+                    key,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                      fontFamily: 'OpenSans',
+                    ),
                   ),
                 ),
               ),
-            ),
-          )
-          .toList(),
-      const DataColumn(
-        label: Expanded(
-          child: Text(
-            'Details',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 16,
-              fontFamily: 'OpenSans',
+            )
+            .toList(),
+        const DataColumn(
+          label: Expanded(
+            child: Text(
+              'Action',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+                fontFamily: 'OpenSans',
+              ),
             ),
           ),
-        ),
-      )
-    ];
+        )
+      ];
+    }
+    return [];
   }
 
   List<DataRow> _buildRows() {
@@ -94,6 +97,12 @@ class _CrudState extends State<Crud> {
           fontWeight: FontWeight.w400,
           // fontFamily: 'OpenSans',
         ),
+      );
+    } else if (data is Color) {
+      return Container(
+        width: double.infinity,
+        height: 25,
+        decoration: BoxDecoration(color: data),
       );
     }
     return Text(
@@ -144,10 +153,12 @@ class _CrudState extends State<Crud> {
                         ),
                       ),
                     ),
-                    child: DataTable(
-                      columns: _buildColumns(),
-                      rows: _buildRows(),
-                    ),
+                    child: widget.entities.isNotEmpty
+                        ? DataTable(
+                            columns: _buildColumns(),
+                            rows: _buildRows(),
+                          )
+                        : Container(),
                   )
                 ],
               ),
