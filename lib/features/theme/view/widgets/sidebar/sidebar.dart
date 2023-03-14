@@ -1,16 +1,15 @@
-import 'package:animated_sidebar/features/features.dart';
-import 'package:animated_sidebar/features/theme/data/repository/sidebar_repository.dart';
-import 'package:animated_sidebar/features/theme/view/widgets/sidebar/sidebar_widgets/criteria.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 
 import '../../../bloc/theme_bloc.dart';
 import '../../../data/model/model.dart';
-import '../topbar.dart';
+
+import '../../../data/repository/repository.dart';
 import 'sidebar_style.dart';
 import 'sidebar_widgets/collapse_button.dart';
-import 'sidebar_widgets/logo.dart';
+
+import 'sidebar_widgets/criteria.dart';
+import 'sidebar_widgets/header.dart';
 import 'sidebar_widgets/sidebar_item.dart';
 
 class Sidebar extends StatefulWidget {
@@ -55,60 +54,71 @@ class _SidebarState extends State<Sidebar> {
   Widget build(BuildContext context) {
     return BlocBuilder<ThemeBloc, ThemeState>(
       builder: (ctx, state) {
-        return Scaffold(
-          body: Stack(
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                  color: sidebarColor,
-                ),
-                height: MediaQuery.of(context).size.height,
-                width:
-                    state.isSidebarExtended ? sidebarWidth : shrinkSidebarWidth,
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 20),
-                  child: SingleChildScrollView(
-                    child: Column(
-                      crossAxisAlignment: state.isSidebarExtended
-                          ? CrossAxisAlignment.start
-                          : CrossAxisAlignment.center,
-                      children: [
-                        Logo(state: state),
-                        SizedBox(
-                          height: 50,
-                          child: Criteria(
-                            isSidebarExtended: state.isSidebarExtended,
-                            label: 'MAIN',
-                          ),
-                        ),
-                        ..._buildSidebarItems(
-                          SidebarRepsitory.mainItems,
-                          widget.selectedItemName,
-                          state.isSidebarExtended,
-                        ),
-                        SizedBox(
-                          height: 50,
-                          child: Criteria(
-                            isSidebarExtended: state.isSidebarExtended,
-                            label: 'ADMINISTRATION',
-                          ),
-                        ),
-                        ..._buildSidebarItems(
-                          SidebarRepsitory.administrationItems,
-                          widget.selectedItemName,
-                          state.isSidebarExtended,
-                        )
-                      ],
+        return Stack(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                color: sidebarColor,
+              ),
+              padding: const EdgeInsets.symmetric(
+                vertical: 10,
+              ),
+              width:
+                  state.isSidebarExtended ? sidebarWidth : shrinkSidebarWidth,
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: state.isSidebarExtended
+                      ? CrossAxisAlignment.start
+                      : CrossAxisAlignment.center,
+                  children: [
+                    Header(
+                      isSidebarExtended: state.isSidebarExtended,
+                      userName: 'Carl Kent',
                     ),
-                  ),
+                    Container(
+                      alignment: Alignment.centerLeft,
+                      height: 50,
+                      child: Criteria(
+                        isSidebarExtended: state.isSidebarExtended,
+                        label: 'MAIN',
+                      ),
+                    ),
+                    ..._buildSidebarItems(
+                      SidebarRepsitory.mainItems,
+                      widget.selectedItemName,
+                      state.isSidebarExtended,
+                    ),
+                    Container(
+                      alignment: Alignment.centerLeft,
+                      height: 50,
+                      child: Criteria(
+                        isSidebarExtended: state.isSidebarExtended,
+                        label: 'ADMINISTRATION',
+                      ),
+                    ),
+                    ..._buildSidebarItems(
+                      SidebarRepsitory.administrationItems,
+                      widget.selectedItemName,
+                      state.isSidebarExtended,
+                    ),
+                    Divider(
+                      color: backgroundColor,
+                      thickness: 0.5,
+                    ),
+                    ..._buildSidebarItems(
+                      SidebarRepsitory.profileItems,
+                      widget.selectedItemName,
+                      state.isSidebarExtended,
+                    )
+                  ],
                 ),
               ),
-              _buildBody(state),
-              CollapseButton(
-                isSidebarExtended: state.isSidebarExtended,
-              ),
-            ],
-          ),
+            ),
+            _buildBody(state),
+            CollapseButton(
+              isSidebarExtended: state.isSidebarExtended,
+            ),
+          ],
         );
       },
     );
@@ -124,29 +134,14 @@ class _SidebarState extends State<Sidebar> {
         decoration: BoxDecoration(
           color: sidebarColor,
         ),
-        padding: const EdgeInsets.only(
-          top: 20,
-          bottom: 20,
-          right: 20,
-        ),
         child: Container(
           decoration: BoxDecoration(
             color: backgroundColor,
           ),
           child: Column(
             children: [
-              Topbar(
-                title: widget.title,
-              ),
               Container(
                 padding: const EdgeInsets.all(15),
-                // child: [
-                //   ...SideBarRepsitory.mainItems,
-                //   ...SideBarRepsitory.administrationItems
-                // ]
-                //     .firstWhere((sidebarItem) =>
-                //         sidebarItem.label == state.selectedItemName)
-                //     .body,
                 child: widget.body,
               )
             ],
