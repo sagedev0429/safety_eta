@@ -1,5 +1,3 @@
-import 'package:animated_sidebar/features/administration/audits/templates/templates.dart';
-import 'package:animated_sidebar/features/administration/masters/priority_levels/view/priority_levels.dart';
 import 'package:flutter/material.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import '../model/sidebar_item.dart';
@@ -95,9 +93,9 @@ class SidebarRepsitory {
           SidebarItemModel(
             iconData: PhosphorIcons.circlesThree,
             color: Colors.redAccent,
-            label: 'Awareness Obs Categories',
-            path: 'awareness-obs-categories',
-            body: const AwarenessObsCategories(),
+            label: 'Awareness Groups',
+            path: 'awareness-groups',
+            body: const AwarenessGroups(),
           ),
           SidebarItemModel(
             iconData: PhosphorIcons.checkSquareOffset,

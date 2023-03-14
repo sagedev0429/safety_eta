@@ -26,7 +26,10 @@ class MyApp extends StatelessWidget {
         ),
         RepositoryProvider(
           create: (context) => ObservationTypesRepository(),
-        )
+        ),
+        RepositoryProvider(
+          create: (context) => AwarenessGroupsRepository(),
+        ),
       ],
       child: MultiBlocProvider(
         providers: [
@@ -49,6 +52,12 @@ class MyApp extends StatelessWidget {
             create: (context) => ObservationTypesBloc(
               observationTypesRepository:
                   RepositoryProvider.of<ObservationTypesRepository>(context),
+            ),
+          ),
+          BlocProvider(
+            create: (context) => AwarenessGroupsBloc(
+              awarenessGroupRepository:
+                  RepositoryProvider.of<AwarenessGroupsRepository>(context),
             ),
           ),
         ],

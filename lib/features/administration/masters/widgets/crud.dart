@@ -62,7 +62,8 @@ class _CrudState extends State<Crud> {
           (entity) => DataRow(
             color: MaterialStateProperty.resolveWith<Color?>(
                 (Set<MaterialState> states) {
-              if (!entity.tableItemsToMap()['Active']) {
+              if (entity.tableItemsToMap().containsKey('Active') &&
+                  !entity.tableItemsToMap()['Active']) {
                 return const Color(0xffe6e7e8);
               }
               return null; // Use the default value.
@@ -74,12 +75,17 @@ class _CrudState extends State<Crud> {
                   .map((value) => DataCell(_buildCell(value)))
                   .toList(),
               DataCell(
-                const Icon(
-                  PhosphorIcons.caretDoubleRightLight,
-                  size: 22,
-                  color: Colors.blue,
+                MouseRegion(
+                  cursor: SystemMouseCursors.click,
+                  child: GestureDetector(
+                    onTap: () {},
+                    child: const Icon(
+                      PhosphorIcons.caretDoubleRightLight,
+                      size: 22,
+                      color: Colors.blue,
+                    ),
+                  ),
                 ),
-                onTap: () {},
               )
             ],
           ),

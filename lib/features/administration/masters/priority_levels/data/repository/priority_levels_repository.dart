@@ -21,7 +21,7 @@ class PriorityLevelsRepository {
         priorityLevel: 'High',
         colorAssociated: Color(0xffe8588f),
         priorityType: 'Corrective',
-        active: true,
+        active: false,
       ),
       PriorityLevel(
         priorityLevel: 'Positive',
