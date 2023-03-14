@@ -55,16 +55,16 @@ class _SidebarItemState extends State<SidebarItem>
       vsync: this,
       duration: Duration(
         milliseconds:
-            context.read<ThemeBloc>().state.isSidebarExtended ? 200 : 100,
+            context.read<ThemeBloc>().state.isSidebarExtended ? 300 : 100,
       ),
     );
 
     anim = Tween(
-            begin: context.read<ThemeBloc>().state.isSidebarExtended
-                ? sidebarWidth
-                : shrinkSidebarWidth,
-            end: 20.0)
-        .animate(animationController);
+      begin: context.read<ThemeBloc>().state.isSidebarExtended
+          ? sidebarWidth
+          : shrinkSidebarWidth,
+      end: 20.0,
+    ).animate(animationController);
 
     color = ColorTween(
       end: widget.color,
@@ -159,10 +159,10 @@ class _SidebarItemState extends State<SidebarItem>
                           child: Text(
                             widget.label,
                             style: const TextStyle(
-                              color: Color(0xff92959a),
                               fontSize: 14,
-                              fontWeight: FontWeight.bold,
+                              fontWeight: FontWeight.w400,
                               fontFamily: 'Roboto',
+                              color: Colors.white,
                             ),
                           ),
                         ),
@@ -265,7 +265,10 @@ class _SidebarItemState extends State<SidebarItem>
                             width: shrinkSidebarWidth,
                           ),
                         ),
-              SizedBox(
+              Container(
+                color: isHover && widget.selectedItemName != widget.path
+                    ? const Color(0xff3b414a)
+                    : Colors.transparent,
                 height: sidebarItemHeight,
                 width: sidebarWidth,
                 child: Container(
@@ -283,11 +286,7 @@ class _SidebarItemState extends State<SidebarItem>
                             alignment: Alignment.center,
                             child: Icon(
                               widget.iconData,
-                              color: color.value == backgroundColor
-                                  ? isHover
-                                      ? backgroundColor
-                                      : widget.color.withOpacity(0.9)
-                                  : widget.color,
+                              color: widget.color,
                               size: 22,
                             ),
                           ),
@@ -307,10 +306,10 @@ class _SidebarItemState extends State<SidebarItem>
                                       color:
                                           widget.selectedItemName == widget.path
                                               ? widget.color
-                                              : backgroundColor,
-                                      fontSize: 12,
+                                              : Colors.white,
+                                      fontSize: 14,
                                       fontFamily: 'Roboto',
-                                      fontWeight: FontWeight.bold,
+                                      fontWeight: FontWeight.w400,
                                     ),
                                   ),
                                 )

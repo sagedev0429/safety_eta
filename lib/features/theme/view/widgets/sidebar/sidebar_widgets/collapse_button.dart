@@ -22,8 +22,8 @@ class _CollapseButtonState extends State<CollapseButton> {
   Widget build(BuildContext context) {
     return AnimatedPositioned(
       left:
-          widget.isSidebarExtended ? sidebarWidth - 15 : shrinkSidebarWidth - 15,
-      top: 80,
+          widget.isSidebarExtended ? sidebarWidth - 50 : shrinkSidebarWidth - 50,
+      top: 20,
       duration: const Duration(milliseconds: 200),
       curve: Curves.fastOutSlowIn,
       child: GestureDetector(
@@ -36,10 +36,10 @@ class _CollapseButtonState extends State<CollapseButton> {
         },
         child: Container(
           padding: const EdgeInsets.only(
-            top: 3,
-            left: 5,
-            right: 5,
-            bottom: 7,
+            top: 5,
+            left: 7,
+            right: 7,
+            bottom: 9,
           ),
           alignment: Alignment.center,
           decoration: BoxDecoration(

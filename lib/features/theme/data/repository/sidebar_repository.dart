@@ -19,6 +19,20 @@ class SidebarRepsitory {
       path: 'observations',
       body: const Observations(),
     ),
+    SidebarItemModel(
+      iconData: PhosphorIcons.scan,
+      color: const Color(0xffe34343),
+      label: 'Audits  ',
+      path: 'audits1',
+      body: const Audits1(),
+    ),
+    SidebarItemModel(
+      iconData: PhosphorIcons.barcode,
+      color: const Color(0xff26a196),
+      label: 'Action Items',
+      path: 'action-items',
+      body: const ActionItems(),
+    ),
   ];
 
   static List<SidebarItemModel> administrationItems = <SidebarItemModel>[
@@ -111,6 +125,23 @@ class SidebarRepsitory {
       label: 'Users',
       path: 'users',
       body: const Users(),
+    ),
+  ];
+
+  static List<SidebarItemModel> profileItems = <SidebarItemModel>[
+    SidebarItemModel(
+      iconData: PhosphorIcons.power,
+      color: Colors.pink,
+      label: 'Logout',
+      path: 'logout',
+      body: const Dashboard(),
+    ),
+    SidebarItemModel(
+      iconData: PhosphorIcons.power,
+      color: Colors.pink,
+      label: 'Super Admin Pages',
+      path: 'super-admin-pages',
+      body: const Observations(),
     ),
   ];
 
