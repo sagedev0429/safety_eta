@@ -15,7 +15,7 @@ class Logo extends StatelessWidget {
           width: 10,
         ),
         const Text(
-          'TapIn WebApp',
+          'Safety ETA',
           style: TextStyle(
             fontSize: 24,
             color: Colors.orangeAccent,

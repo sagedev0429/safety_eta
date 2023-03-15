@@ -81,6 +81,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.4"
+  el_tooltip:
+    dependency: "direct main"
+    description:
+      name: el_tooltip
+      sha256: "03c25f52317fe385fcd7f3eccc0e4a04bfe686a1c993e0cb1ba8ce4e84614cbb"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.8"
   equatable:
     dependency: "direct main"
     description:
@@ -200,6 +208,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.6.5"
+  just_the_tooltip:
+    dependency: "direct main"
+    description:
+      name: just_the_tooltip
+      sha256: "7a081133d57285bfb41b331f411006d57b433d7b35772e6155745f6a7a09cb82"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.12"
   lints:
     dependency: transitive
     description:

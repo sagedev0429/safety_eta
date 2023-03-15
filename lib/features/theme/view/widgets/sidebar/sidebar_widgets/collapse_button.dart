@@ -21,17 +21,22 @@ class _CollapseButtonState extends State<CollapseButton> {
   @override
   Widget build(BuildContext context) {
     return AnimatedPositioned(
-      left:
-          widget.isSidebarExtended ? sidebarWidth - 50 : shrinkSidebarWidth - 50,
+      left: widget.isSidebarExtended
+          ? sidebarWidth - 50
+          : shrinkSidebarWidth - 50,
       top: 20,
       duration: const Duration(milliseconds: 200),
       curve: Curves.fastOutSlowIn,
       child: GestureDetector(
         onTap: () {
-          if (widget.isSidebarExtended) {
-            context.read<ThemeBloc>().add(ThemeSidebarShrank());
+          if (MediaQuery.of(context).size.width < 1000) {
+            Navigator.of(context).pop();
           } else {
-            context.read<ThemeBloc>().add(ThemeSidebarExtended());
+            if (widget.isSidebarExtended) {
+              context.read<ThemeBloc>().add(ThemeSidebarShrank());
+            } else {
+              context.read<ThemeBloc>().add(ThemeSidebarExtended());
+            }
           }
         },
         child: Container(
@@ -55,7 +60,9 @@ class _CollapseButtonState extends State<CollapseButton> {
           child: MouseRegion(
             cursor: SystemMouseCursors.click,
             child: Icon(
-              PhosphorIcons.arrowsLeftRightLight,
+              MediaQuery.of(context).size.width < 1000
+                  ? PhosphorIcons.x
+                  : PhosphorIcons.arrowsLeftRightLight,
               size: 18,
               weight: 400,
               color: sidebarColor,

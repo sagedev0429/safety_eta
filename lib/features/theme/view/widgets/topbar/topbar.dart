@@ -2,6 +2,7 @@ import 'package:animated_sidebar/features/theme/view/widgets/sidebar/sidebar_sty
 import 'package:animated_sidebar/features/theme/view/widgets/topbar/topbar_widgets/logo.dart';
 import 'package:animated_sidebar/features/theme/view/widgets/topbar/topbar_widgets/search_field.dart';
 import 'package:flutter/material.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 class Topbar extends StatelessWidget {
   const Topbar({
@@ -11,7 +12,7 @@ class Topbar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 100,
+      height: 75,
       padding: const EdgeInsets.all(10),
       width: double.infinity,
       decoration: BoxDecoration(
@@ -25,7 +26,27 @@ class Topbar extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const Logo(),
+            Row(
+              children: [
+                MediaQuery.of(context).size.width < 1000
+                    ? Builder(
+                        builder: (context) => // Ensure Scaffold is in context
+                            IconButton(
+                          icon: Icon(
+                            PhosphorIcons.list,
+                            color: backgroundColor,
+                            size: 20,
+                          ),
+                          onPressed: () => Scaffold.of(context).openDrawer(),
+                        ),
+                      )
+                    : Container(),
+                const SizedBox(
+                  width: 15,
+                ),
+                const Logo()
+              ],
+            ),
             const SearchField(),
           ],
         ),

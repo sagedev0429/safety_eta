@@ -15,11 +15,10 @@ import 'sidebar_widgets/sidebar_item.dart';
 class Sidebar extends StatefulWidget {
   const Sidebar({
     super.key,
-    required this.body,
     required this.selectedItemName,
     required this.title,
   });
-  final Widget body;
+
   final String selectedItemName;
   final String title;
 
@@ -75,6 +74,10 @@ class _SidebarState extends State<Sidebar> {
                       isSidebarExtended: state.isSidebarExtended,
                       userName: 'Carl Kent',
                     ),
+                    Divider(
+                      color: backgroundColor,
+                      thickness: 0.5,
+                    ),
                     Container(
                       alignment: Alignment.centerLeft,
                       height: 50,
@@ -87,6 +90,10 @@ class _SidebarState extends State<Sidebar> {
                       SidebarRepsitory.mainItems,
                       widget.selectedItemName,
                       state.isSidebarExtended,
+                    ),
+                    Divider(
+                      color: backgroundColor,
+                      thickness: 0.5,
                     ),
                     Container(
                       alignment: Alignment.centerLeft,
@@ -114,7 +121,7 @@ class _SidebarState extends State<Sidebar> {
                 ),
               ),
             ),
-            _buildBody(state),
+            // _buildBody(state),
             CollapseButton(
               isSidebarExtended: state.isSidebarExtended,
             ),
@@ -124,30 +131,30 @@ class _SidebarState extends State<Sidebar> {
     );
   }
 
-  AnimatedPositioned _buildBody(ThemeState state) {
-    return AnimatedPositioned(
-      duration: const Duration(milliseconds: 200),
-      child: Container(
-        margin: EdgeInsets.only(
-          left: state.isSidebarExtended ? sidebarWidth : shrinkSidebarWidth,
-        ),
-        decoration: BoxDecoration(
-          color: sidebarColor,
-        ),
-        child: Container(
-          decoration: BoxDecoration(
-            color: backgroundColor,
-          ),
-          child: Column(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(15),
-                child: widget.body,
-              )
-            ],
-          ),
-        ),
-      ),
-    );
-  }
+  // AnimatedPositioned _buildBody(ThemeState state) {
+  //   return AnimatedPositioned(
+  //     duration: const Duration(milliseconds: 200),
+  //     child: Container(
+  //       margin: EdgeInsets.only(
+  //         left: state.isSidebarExtended ? sidebarWidth : shrinkSidebarWidth,
+  //       ),
+  //       decoration: BoxDecoration(
+  //         color: sidebarColor,
+  //       ),
+  //       child: Container(
+  //         decoration: BoxDecoration(
+  //           color: backgroundColor,
+  //         ),
+  //         child: Column(
+  //           children: [
+  //             Container(
+  //               padding: const EdgeInsets.all(15),
+  //               child: widget.body,
+  //             )
+  //           ],
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
 }
