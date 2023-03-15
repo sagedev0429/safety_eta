@@ -23,18 +23,39 @@ class Layout extends StatefulWidget {
 
 class _LayoutState extends State<Layout> {
   late ScrollController _scrollController;
+  GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
     _scrollController = ScrollController();
+    scaffoldKey.currentState?.openDrawer();
 
     super.initState();
   }
 
   @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: scaffoldKey,
       backgroundColor: backgroundColor,
+      drawerEnableOpenDragGesture: false,
+      drawerScrimColor: Colors.transparent,
+      drawer: MediaQuery.of(context).size.width < 1000
+          ? Drawer(
+              width: sidebarWidth,
+              backgroundColor: sidebarColor,
+              child: Sidebar(
+                selectedItemName: widget.selectedItemName,
+                title: widget.title,
+              ),
+            )
+          : null,
       body: WebSmoothScroll(
         controller: _scrollController,
         scrollOffset: 100,
@@ -46,14 +67,23 @@ class _LayoutState extends State<Layout> {
           child: Column(
             children: [
               const Topbar(),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Sidebar(
-                  selectedItemName: widget.selectedItemName,
-                  title: widget.title,
-                  body: widget.body,
-                ),
-              )
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: MediaQuery.of(context).size.width < 1000
+                        ? null
+                        : Sidebar(
+                            selectedItemName: widget.selectedItemName,
+                            title: widget.title,
+                          ),
+                  ),
+                  Expanded(
+                    child: widget.body,
+                  )
+                ],
+              ),
             ],
           ),
         ),

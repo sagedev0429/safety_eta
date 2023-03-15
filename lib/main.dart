@@ -62,7 +62,7 @@ class MyApp extends StatelessWidget {
           ),
         ],
         child: MaterialApp.router(
-          title: 'ETA',
+          title: 'Safety ETA',
           theme: ThemeData(
             primarySwatch: Colors.blue,
           ),

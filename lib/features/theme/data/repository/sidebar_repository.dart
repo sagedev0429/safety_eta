@@ -130,18 +130,18 @@ class SidebarRepsitory {
 
   static List<SidebarItemModel> profileItems = <SidebarItemModel>[
     SidebarItemModel(
+      iconData: PhosphorIcons.user,
+      color: Colors.pink,
+      label: 'My Page',
+      path: 'my-page',
+      body: const Observations(),
+    ),
+    SidebarItemModel(
       iconData: PhosphorIcons.power,
       color: Colors.pink,
       label: 'Logout',
       path: 'logout',
       body: const Dashboard(),
-    ),
-    SidebarItemModel(
-      iconData: PhosphorIcons.power,
-      color: Colors.pink,
-      label: 'Super Admin Pages',
-      path: 'super-admin-pages',
-      body: const Observations(),
     ),
   ];
 

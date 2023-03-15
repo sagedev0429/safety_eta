@@ -2,6 +2,7 @@ import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:just_the_tooltip/just_the_tooltip.dart';
 
 import '../../../../bloc/theme_bloc.dart';
 import '../../../../data/model/model.dart';
@@ -38,10 +39,11 @@ class _SidebarItemState extends State<SidebarItem>
   late Animation<double> anim;
   late Animation<Color?> color;
   bool isHover = false;
+  bool isSelected = false;
   bool isSidebarItemExtended = false;
   CustomPopupMenuController customPopupMenuController =
       CustomPopupMenuController();
-
+  final tooltipController = JustTheController();
   @override
   void initState() {
     super.initState();
@@ -50,12 +52,12 @@ class _SidebarItemState extends State<SidebarItem>
       isSidebarItemExtended = widget.subItems.map((e) => e.path).contains(
             widget.selectedItemName,
           );
+      isSelected = widget.path == widget.selectedItemName;
     });
     animationController = AnimationController(
       vsync: this,
-      duration: Duration(
-        milliseconds:
-            context.read<ThemeBloc>().state.isSidebarExtended ? 300 : 100,
+      duration: const Duration(
+        milliseconds: 350,
       ),
     );
 
@@ -63,7 +65,7 @@ class _SidebarItemState extends State<SidebarItem>
       begin: context.read<ThemeBloc>().state.isSidebarExtended
           ? sidebarWidth
           : shrinkSidebarWidth,
-      end: 20.0,
+      end: 0.0,
     ).animate(animationController);
 
     color = ColorTween(
@@ -82,15 +84,23 @@ class _SidebarItemState extends State<SidebarItem>
   }
 
   @override
-  void didUpdateWidget(covariant SidebarItem oldWidget) {
-    super.didUpdateWidget(oldWidget);
-
-    if (widget.selectedItemName != widget.path) {
-      animationController.reverse();
-    } else {
-      animationController.forward();
-    }
+  void dispose() {
+    animationController.dispose();
+    customPopupMenuController.dispose();
+    tooltipController.dispose();
+    super.dispose();
   }
+
+  // @override
+  // void didUpdateWidget(covariant SidebarItem oldWidget) {
+  //   super.didUpdateWidget(oldWidget);
+
+  //   if (widget.selectedItemName != widget.path) {
+  //     animationController.reverse();
+  //   } else {
+  //     animationController.forward();
+  //   }
+  // }
 
   void _showPopupMenu(ThemeState state) {
     if (widget.subItems.isNotEmpty && !state.isSidebarExtended) {
@@ -108,15 +118,13 @@ class _SidebarItemState extends State<SidebarItem>
   Widget build(BuildContext context) {
     return BlocConsumer<ThemeBloc, ThemeState>(
       listener: (context, state) {
-        animationController.duration = Duration(
-            milliseconds:
-                context.read<ThemeBloc>().state.isSidebarExtended ? 200 : 100);
+        animationController.duration = const Duration(milliseconds: 400);
         anim = Tween(
-                begin: context.read<ThemeBloc>().state.isSidebarExtended
-                    ? sidebarWidth
-                    : shrinkSidebarWidth,
-                end: sidebarItemHeight / 4)
-            .animate(animationController);
+          begin: context.read<ThemeBloc>().state.isSidebarExtended
+              ? sidebarWidth
+              : shrinkSidebarWidth,
+          end: 0.0,
+        ).animate(animationController);
 
         if (state.hoveredItemName != widget.label) {
           _hidePopupMenu(state);
@@ -175,7 +183,7 @@ class _SidebarItemState extends State<SidebarItem>
                 pressType: PressType.longPress,
                 showArrow: false,
                 horizontalMargin: shrinkSidebarWidth + 5,
-                verticalMargin: -sidebarItemHeight + 20,
+                verticalMargin: -sidebarItemHeight - 30,
                 child: _buildItemBody(state),
               ),
               ...(state.isSidebarExtended && isSidebarItemExtended
@@ -221,6 +229,65 @@ class _SidebarItemState extends State<SidebarItem>
         : Container();
   }
 
+  Widget _buildIcon() {
+    return !widget.isSidebarExtended &&
+            widget.subItems.isEmpty &&
+            !widget.isSubItem
+        ? JustTheTooltip(
+            controller: tooltipController,
+            tailLength: 10.0,
+            backgroundColor: sidebarColor,
+            preferredDirection: AxisDirection.right,
+            content: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                widget.label,
+                style: TextStyle(
+                  color: backgroundColor,
+                  fontSize: 14,
+                ),
+              ),
+            ),
+            child: Container(
+              alignment: Alignment.center,
+              child: Icon(
+                widget.iconData,
+                color: widget.color,
+                size: 22,
+              ),
+            ),
+          )
+        : Container(
+            alignment: Alignment.center,
+            child: Icon(
+              widget.iconData,
+              color: widget.color,
+              size: 22,
+            ),
+          );
+  }
+
+  Widget _buildLabel() {
+    return widget.isSidebarExtended || widget.isSubItem
+        ? Container(
+            alignment: Alignment.center,
+            margin: const EdgeInsets.only(top: 5),
+            child: Text(
+              widget.label,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: widget.selectedItemName == widget.path
+                    ? widget.color
+                    : Colors.white,
+                fontSize: 14,
+                fontFamily: 'Roboto',
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+          )
+        : Container();
+  }
+
   Widget _buildItemBody(ThemeState state) {
     return GestureDetector(
       onTap: () {
@@ -243,9 +310,6 @@ class _SidebarItemState extends State<SidebarItem>
         },
         child: Container(
           color: Colors.transparent,
-          padding: EdgeInsets.only(
-            left: widget.isSubItem && state.isSidebarExtended ? 15 : 0,
-          ),
           child: Stack(
             children: [
               state.isSidebarExtended
@@ -266,14 +330,12 @@ class _SidebarItemState extends State<SidebarItem>
                           ),
                         ),
               Container(
-                color: isHover && widget.selectedItemName != widget.path
-                    ? const Color(0xff3b414a)
-                    : Colors.transparent,
+                color: isHover ? const Color(0xff3b414a) : Colors.transparent,
                 height: sidebarItemHeight,
                 width: sidebarWidth,
                 child: Container(
                   padding: EdgeInsets.only(
-                    left: sidebarWidth / 8 + sidebarItemHeight / 8 - 5.0,
+                    left: 30 + (widget.isSubItem ? 15 : 0),
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -282,38 +344,13 @@ class _SidebarItemState extends State<SidebarItem>
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Container(
-                            alignment: Alignment.center,
-                            child: Icon(
-                              widget.iconData,
-                              color: widget.color,
-                              size: 22,
-                            ),
-                          ),
+                          _buildIcon(),
                           widget.isSidebarExtended || widget.isSubItem
                               ? const SizedBox(
                                   width: 10,
                                 )
                               : Container(),
-                          widget.isSidebarExtended || widget.isSubItem
-                              ? Container(
-                                  alignment: Alignment.center,
-                                  margin: const EdgeInsets.only(top: 5),
-                                  child: Text(
-                                    widget.label,
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      color:
-                                          widget.selectedItemName == widget.path
-                                              ? widget.color
-                                              : Colors.white,
-                                      fontSize: 14,
-                                      fontFamily: 'Roboto',
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                  ),
-                                )
-                              : Container(),
+                          _buildLabel(),
                         ],
                       ),
                       _buildExtendIcon(state)
@@ -341,8 +378,7 @@ class CurvePainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     Path path = Path();
     Paint paint = Paint();
-
-    paint.color = backgroundColor;
+    paint.color = const Color(0xff3b414a);
     path.addRect(
       Rect.fromPoints(
         Offset(animValue, 0),
@@ -352,12 +388,13 @@ class CurvePainter extends CustomPainter {
         ),
       ),
     );
+    path.close();
 
     canvas.drawPath(path, paint);
   }
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    return oldDelegate == this;
+    return oldDelegate != this;
   }
 }

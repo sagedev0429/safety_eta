@@ -12,6 +12,7 @@ dependencies:
   bloc: ^8.1.1
   cupertino_icons: ^1.0.2
   custom_pop_up_menu: ^1.2.4
+  el_tooltip: ^1.0.8
   equatable: ^2.0.5
   flutter:
     sdk: flutter
@@ -19,6 +20,7 @@ dependencies:
   go_router: ^6.2.0
   google_fonts: ^4.0.3
   hydrated_bloc: ^9.1.0
+  just_the_tooltip: ^0.0.12
   phosphor_flutter: ^1.4.0
   web_smooth_scroll: ^1.1.0
 
